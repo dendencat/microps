@@ -70,18 +70,19 @@ cleanup(void)
     return 0;
 }
 
-static int
+int
 app_main(void)
 {
 	ip_addr_t src, dst;
 	size_t offset = IP_HDR_SIZE_MIN;
 
+	infof("callled");
 	ip_addr_pton(LOOPBACK_IP_ADDR, &src);
 	dst = src;
 	debugf("press Ctrl + C to terminate");
 	while (!terminate) {
-		if (ip_output(1, test_data + offset, sizeof(test_data) - offset, src, dst) == -1) {
-			errorf("ip_output() failure");
+		if (ip_output(IP_PROTOCOL_ICMP, test_data + offset, sizeof(test_data) - offset, src, dst) == -1) {
+			errorf("net_device_output() failure");
 			break;
 		}
 		sleep(1);
